@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Image Upload</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#preview img {
+    max-width: 100px;
+    margin: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+}
+
+</style>
+
+    <div class="container">
+        <h1>Bulk Image Upload</h1>
+        <input type="file" id="fileInput" multiple>
+        <div id="preview"></div>
+        <pre id="imagePaths"></pre>
+    </div>
+   <script>
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+    const files = event.target.files;
+    const preview = document.getElementById('preview');
+    const imagePaths = document.getElementById('imagePaths');
+    let paths = [];
+
+    preview.innerHTML = '';
+    imagePaths.innerHTML = '';
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            preview.appendChild(img);
+            paths.push(file.name); // This would be the path on the server side
+            imagePaths.textContent = JSON.stringify(paths, null, 2);
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+   </script>
+</body>
+</html>
